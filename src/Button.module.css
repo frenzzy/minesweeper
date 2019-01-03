@@ -1,0 +1,59 @@
+.root {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0 1px 1px 0;
+  color: #000;
+  font: inherit;
+  vertical-align: top;
+  background: #d4d0c8;
+  border: 1px solid;
+  border-color: #fff #404040 #404040 #fff;
+  outline: 0;
+  cursor: pointer;
+}
+
+.root::before,
+.root::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid;
+  border-color: #d4d0c8 #808080 #808080 #d4d0c8;
+  content: '';
+}
+
+.root::before {
+  border: 2px solid transparent;
+}
+
+.root:active {
+  padding: 1px 0 0 1px;
+  border-color: #404040 #fff #fff #404040;
+}
+
+.root:active::after {
+  border-color: #808080 #d4d0c8 #d4d0c8 #808080;
+}
+
+.root:focus {
+  border-color: #000;
+}
+
+.root:focus::before {
+  border-color: transparent #808080 #808080 transparent;
+}
+
+.root:focus::after {
+  border-color: #fff #404040 #404040 #fff;
+}
+
+.root:focus:active::before {
+  border-color: #808080 transparent transparent #808080;
+}
+
+.root:focus:active::after {
+  border-color: #000 #fff #fff #000;
+}

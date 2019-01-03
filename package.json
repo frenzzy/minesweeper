@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "",
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "dependencies": {
+    "hyperapp": "^1.2.9",
+    "hyperapp-render": "^3.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1",
+    "hyperapp-tools": "^2.1.0"
+  },
+  "scripts": {
+    "start": "hyperapp-tools start",
+    "build": "hyperapp-tools build",
+    "test": "hyperapp-tools test",
+    "lint": "hyperapp-tools lint",
+    "predeploy": "hyperapp-tools build --render",
+    "deploy": "gh-pages --dist build/public"
+  }
+}

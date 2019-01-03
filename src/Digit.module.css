@@ -1,0 +1,41 @@
+.root {
+  background: #000;
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.digit {
+  display: inline-block;
+  vertical-align: top;
+  fill: red;
+}
+
+.digit[data-n='-'] .t,
+.digit[data-n='-'] .rt,
+.digit[data-n='-'] .rb,
+.digit[data-n='-'] .b,
+.digit[data-n='-'] .lb,
+.digit[data-n='-'] .lt,
+.digit[data-n='0'] .m,
+.digit[data-n='1'] .t,
+.digit[data-n='1'] .b,
+.digit[data-n='1'] .lb,
+.digit[data-n='1'] .lt,
+.digit[data-n='1'] .m,
+.digit[data-n='2'] .rb,
+.digit[data-n='2'] .lt,
+.digit[data-n='3'] .lb,
+.digit[data-n='3'] .lt,
+.digit[data-n='4'] .t,
+.digit[data-n='4'] .b,
+.digit[data-n='4'] .lb,
+.digit[data-n='5'] .rt,
+.digit[data-n='5'] .lb,
+.digit[data-n='6'] .rt,
+.digit[data-n='7'] .b,
+.digit[data-n='7'] .lb,
+.digit[data-n='7'] .lt,
+.digit[data-n='7'] .m,
+.digit[data-n='9'] .lb {
+  fill: rgba(255, 0, 0, 0.5);
+}

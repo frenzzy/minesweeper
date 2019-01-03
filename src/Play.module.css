@@ -1,0 +1,40 @@
+.root {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 3px 3px 2px 2px;
+  background: #bdbdbd;
+  border: 1px solid #7b7b7b;
+  outline: 0;
+  cursor: pointer;
+}
+
+.root::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 2px solid;
+  border-color: #fff #7b7b7b #7b7b7b #fff;
+  content: '';
+}
+
+.root:active {
+  padding: 4px 1px 1px 4px;
+}
+
+.root:active::before {
+  border-width: 1px 0 0 1px;
+  border-color: #7b7b7b;
+}
+
+.down,
+.root:active .up {
+  display: none;
+}
+
+.face,
+.root:active .down {
+  display: block;
+}

@@ -1,0 +1,20 @@
+.root {
+  width: 130px;
+  padding: 22px 10px;
+  text-align: center;
+}
+
+.text {
+  margin: 0;
+  line-height: 13px;
+}
+
+.input {
+  padding: 22px 10px 12px;
+}
+
+.button {
+  display: block;
+  width: 44px;
+  padding: 4px 3px 3px 4px;
+}

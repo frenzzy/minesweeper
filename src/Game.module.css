@@ -1,0 +1,33 @@
+.root {
+  padding: 6px 5px 5px 6px;
+  background: #c0c0c0;
+  border: solid #fff;
+  border-width: 3px 0 0 3px;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 0 6px;
+  padding: 4px 7px 3px 5px;
+  text-align: center;
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+}
+
+.field {
+  white-space: nowrap;
+  border-width: 2px 3px 3px 2px;
+  border-style: solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0 2px;
+}
+
+.active {
+  cursor: pointer;
+}
+
+.inactive {
+  cursor: default;
+}
