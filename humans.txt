@@ -1,0 +1,10 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Vladimir Kutepov
+
+# TECHNOLOGY COLOPHON
+
+    Hyperapp Starter -- https://github.com/kriasoft/hyperapp-starter
