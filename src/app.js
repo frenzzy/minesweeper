@@ -93,11 +93,16 @@ export const state = {
 export const actions = {
   getState: () => (state) => state,
   destroy: () => ({ destroy: true }),
-  reset: (data) => ({ game }) => {
+  reset: (payload) => ({ game }) => {
     cancelAnimationFrame(game.raf)
+    const params = (payload && levels[payload.level]) || payload || game
+    window.gtag('event', params.level === game.level ? 'reset' : 'level', {
+      event_category: 'game',
+      event_label: params.level,
+    })
     return {
       menu: null,
-      game: createGame((data && levels[data.level]) || data || game),
+      game: createGame(params),
     }
   },
   down: ({ event, x, y }) => ({ game, marks }, actions) => {
@@ -186,6 +191,11 @@ export const actions = {
 
       // eslint-disable-next-line no-param-reassign
       game.raf = requestAnimationFrame(actions.tick)
+
+      window.gtag('event', 'start', {
+        event_category: 'game',
+        event_label: game.level,
+      })
     }
 
     const cell = field[pressedY][pressedX]
@@ -203,8 +213,13 @@ export const actions = {
 
     const win = left <= 0
     if (win || lose) {
-      if (win && !lose) actions.win()
       cancelAnimationFrame(game.raf)
+      if (!lose) actions.win()
+      window.gtag('event', lose ? 'lose' : 'win', {
+        event_category: 'game',
+        event_label: game.level,
+        value: game.time,
+      })
     }
 
     return {
@@ -240,8 +255,8 @@ export const actions = {
       },
     }
   },
-  changeWinner: (data) => ({ winner }) => ({
-    winner: { ...winner, ...data },
+  changeWinner: (payload) => ({ winner }) => ({
+    winner: { ...winner, ...payload },
   }),
   submitBestTime: (event) => ({ winner }, actions) => {
     event.preventDefault()
@@ -281,8 +296,8 @@ export const actions = {
           mines: String(game.mines),
         },
   }),
-  changeCustomField: (data) => ({ customField }) => ({
-    customField: { ...customField, ...data },
+  changeCustomField: (payload) => ({ customField }) => ({
+    customField: { ...customField, ...payload },
   }),
   submitCustomField: (event) => ({ game, customField }, actions) => {
     event.preventDefault()

@@ -31,17 +31,16 @@ export const view = () => (
         <link rel="apple-touch-icon" href={icon} />
         <link rel="shortcut icon" href={favicon} />
         {styles && <link rel="stylesheet" href={styles} />}
+        <script
+          innerHTML={
+            `dataLayer=[];function gtag(){dataLayer.push(arguments)}` +
+            `gtag('js',new Date());gtag('config','UA-131736543-1');`
+          }
+        />
         {script && <script src={script} defer />}
         {!module.hot && (
           <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131736543-1" />
         )}
-        <script
-          innerHTML={
-            `window.dataLayer=window.dataLayer||[];` +
-            `function gtag(){dataLayer.push(arguments)}` +
-            `gtag('js',new Date());gtag('config','UA-131736543-1')`
-          }
-        />
       </head>
       <body>
         <div id="app" />
