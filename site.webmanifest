@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/",
+  "start_url": "/minesweeper",
   "display": "standalone",
   "theme_color": "#c0c0c0",
   "background_color": "#d4d0c8"
