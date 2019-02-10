@@ -16,17 +16,26 @@ export const { actions } = app
 export const view = () => (
   <Fragment>
     <Fragment innerHTML="<!doctype html>" />
-    <html lang="en">
+    <html lang="en" prefix="og: http://ogp.me/ns#">
       <head>
         <meta charset="utf-8" />
         <title>Minesweeper</title>
         <meta
           name="description"
-          content="A free, online minesweeper game written in javascript with open source."
+          content="A free, online minesweeper game written in javascript with open source"
         />
         <meta name="keywords" content="minesweeper, game, online, free, javascript, open source" />
         <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
         <meta name="theme-color" content="#c0c0c0" />
+        <meta property="og:title" content="Minesweeper" />
+        <meta property="og:description" content="A free, online minesweeper game written in javascript with open source" />
+        <meta property="og:url" content="https://frenzzy.github.io/minesweeper/" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://frenzzy.github.io/minesweeper/minesweeper.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Minesweeper" />
         <link rel="manifest" href={manifest} />
         <link rel="apple-touch-icon" href={icon} />
         <link rel="shortcut icon" href={favicon} />
