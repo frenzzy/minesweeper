@@ -3,6 +3,7 @@
   border: 1px solid;
   border-color: #808080 #fff #fff #808080;
 }
+
 .input {
   box-sizing: border-box;
   width: 100%;
@@ -13,5 +14,7 @@
   background: #fff;
   border: 1px solid;
   border-color: #000 #d4d0c8 #d4d0c8 #000;
+  border-radius: 0;
   outline: 0;
+  appearance: none;
 }

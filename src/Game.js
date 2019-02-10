@@ -7,11 +7,7 @@ import Play from './Play'
 import Cell from './Cell'
 
 const Game = ({ key, state, actions }) => (
-  <Dialog
-    key={key}
-    title="Minesweeper"
-    onKeyDown={(event) => (event.keyCode === 113 || event.keyCode === 78) && actions.reset()}
-  >
+  <Dialog key={key} title="Minesweeper">
     <Menu state={state} actions={actions} />
     <div class={s.root}>
       <div class={s.scoreboard}>
@@ -43,6 +39,7 @@ const Game = ({ key, state, actions }) => (
                 lose={state.game.lose}
                 onDown={actions.down}
                 onMove={actions.move}
+                onTouch={actions.touch}
               />
             ))}
           </div>

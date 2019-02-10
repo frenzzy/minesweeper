@@ -2,22 +2,10 @@ import { h } from 'hyperapp'
 import s from './Dialog.module.css'
 import Button from './Button'
 
-const prevent = (event) => {
-  event.preventDefault()
-  return false
-}
-
-const Dialog = ({ key, title, onClose, onKeyDown }, children) => (
-  <section
-    key={key}
-    class={s.root}
-    tabindex={-1}
-    oncontextmenu={prevent}
-    ondragstart={prevent}
-    onkeydown={onKeyDown}
-  >
-    <div class={s.table}>
-      <div class={s.cell}>
+const Dialog = ({ key, title, onClose }, children) => (
+  <div key={key}>
+    <div class={s.a}>
+      <div class={s.b}>
         <div class={s.dialog}>
           <div class={s.container}>
             {title && (
@@ -39,7 +27,7 @@ const Dialog = ({ key, title, onClose, onKeyDown }, children) => (
         </div>
       </div>
     </div>
-  </section>
+  </div>
 )
 
 export default Dialog

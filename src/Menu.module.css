@@ -60,13 +60,6 @@
   display: block;
 }
 
-/* .menu .menu {
-  top: 0;
-  left: 100%;
-  display: none;
-  margin: -3px 0 0 -3px;
-} */
-
 .item {
   position: relative;
 }
@@ -106,9 +99,10 @@
 }
 
 .check {
-  position: absolute;
-  top: 5px;
-  left: 4px;
+  display: inline-block;
+  position: relative;
+  vertical-align: baseline;
+  margin: 0 6px 0 -13px;
   fill: currentColor;
 }
 

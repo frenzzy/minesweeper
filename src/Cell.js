@@ -108,6 +108,7 @@ const Cell = ({
   lose,
   onDown,
   onMove,
+  onTouch,
 }) => (
   <button
     type="button"
@@ -128,6 +129,9 @@ const Cell = ({
     }}
     onmouseleave={() => {
       onMove({ x: -1, y: -1 })
+    }}
+    ontouchstart={(event) => {
+      onTouch({ event, x, y })
     }}
   >
     <svg class={opened && mined ? s.hurt : s.image} width="15" height="15">

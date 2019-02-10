@@ -11,6 +11,8 @@
   border: 0;
   outline: 0;
   cursor: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .root::before {

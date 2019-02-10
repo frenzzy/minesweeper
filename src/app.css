@@ -3,19 +3,25 @@ html {
 }
 
 body {
-  min-height: 100vh;
   margin: 0;
-  overflow: hidden;
-  background: #346da8;
 }
 
-body::before {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+html,
+body,
+#app {
   height: 100%;
-  background: url(./background.jpg) 50% 50%;
+}
+
+main {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 100%;
+  min-height: 100%;
+  vertical-align: top;
+  background: #346da8 url(./background.jpg) 50% 50%;
   background-size: cover;
-  content: '';
+  user-select: none;
 }

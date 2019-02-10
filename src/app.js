@@ -28,6 +28,8 @@ const levels = {
 
 const levelNames = Object.keys(levels)
 
+const canUseDom = typeof window !== 'undefined'
+
 const createGame = ({ level, width, height, mines }) => {
   const field = new Array(height)
   for (let y = 0, m = mines; y < height; y++) {
@@ -59,7 +61,26 @@ const createGame = ({ level, width, height, mines }) => {
     raf: null,
     lose: false,
     win: false,
+    touch: false,
   }
+}
+
+const openable = (game, x, y) => {
+  const cell = game.field[y][x]
+  if (cell.opened) {
+    let num = 0
+    for (let offsetX = -1; offsetX <= 1; offsetX++) {
+      for (let offsetY = -1; offsetY <= 1; offsetY++) {
+        const dx = offsetX + x
+        const dy = offsetY + y
+        if (dx >= 0 && dy >= 0 && dx < game.width && dy < game.height) {
+          num += game.field[dy][dx].flag ? 1 : 0
+        }
+      }
+    }
+    return num === cell.num
+  }
+  return false
 }
 
 const revealRange = (x, y, fn) =>
@@ -72,19 +93,40 @@ const revealRange = (x, y, fn) =>
   fn(x, y - 1) +
   fn(x, y + 1)
 
-const hasMarks = () => {
-  if (typeof localStorage !== 'undefined') {
-    const marks = localStorage.getItem('marks')
-    if (marks != null) return Boolean(marks)
+const customLevel = (data, defaults) => {
+  const width = Math.max(9, Math.min(40, parseInt(data.width, 10) || defaults.width))
+  const height = Math.max(9, Math.min(30, parseInt(data.height, 10) || defaults.height))
+  const mines = parseInt(data.mines, 10) || defaults.mines
+  return {
+    level: 'custom',
+    width,
+    height,
+    mines: Math.max(10, Math.min(Math.floor(width * height * 0.8), mines)),
   }
-  return true
+}
+
+const loadLevel = () => {
+  if (canUseDom) {
+    const level = localStorage.getItem('level')
+    if (typeof level === 'string') {
+      if (levels[level]) return levels[level]
+      const data = level.split(',')
+      return customLevel({ width: data[0], height: data[1], mines: data[2] }, levels.beginner)
+    }
+  }
+  return levels.beginner
+}
+
+const prevent = (event) => {
+  event.preventDefault()
+  return false
 }
 
 export const state = {
   destroy: false,
   menu: null,
-  game: createGame(levels.beginner),
-  marks: hasMarks(),
+  game: createGame(loadLevel()),
+  marks: canUseDom ? Boolean(localStorage.getItem('marks')) : false,
   winner: null,
   bestTime: null,
   customField: null,
@@ -92,7 +134,18 @@ export const state = {
 
 export const actions = {
   getState: () => (state) => state,
-  destroy: () => ({ destroy: true }),
+  init: () => (state, actions) => {
+    window.addEventListener('keydown', actions.press)
+  },
+  destroy: () => (state, actions) => {
+    window.removeEventListener('keydown', actions.press)
+    return { destroy: true }
+  },
+  press: (event) => (state, actions) => {
+    if (event.keyCode === 113 || event.keyCode === 78) {
+      actions.reset()
+    }
+  },
   reset: (payload) => ({ game }) => {
     cancelAnimationFrame(game.raf)
     const params = (payload && levels[payload.level]) || payload || game
@@ -100,30 +153,97 @@ export const actions = {
       event_category: 'game',
       event_label: params.level,
     })
+    localStorage.setItem(
+      'level',
+      params.level === 'custom'
+        ? [params.width, params.height, params.mines].join()
+        : params.level,
+    )
     return {
       menu: null,
       game: createGame(params),
     }
   },
-  down: ({ event, x, y }) => ({ game, marks }, actions) => {
-    if (event.button > 2 || game.win || game.lose) return null
-    window.addEventListener('mouseup', function listener() {
-      window.removeEventListener('mouseup', listener)
+  touch: ({ event, x, y }) => ({ game }, actions) => {
+    if (game.win || game.lose) return null
+    const rect = event.currentTarget.getBoundingClientRect()
+    const timer = setTimeout(actions.flag, 600)
+    const move = ({ touches }) => {
+      if (
+        !touches ||
+        touches.length !== 1 ||
+        touches[0].clientX < rect.left ||
+        touches[0].clientX > rect.right ||
+        touches[0].clientY < rect.top ||
+        touches[0].clientY > rect.bottom
+      ) {
+        clearTimeout(timer)
+        actions.move({ x: -1, y: -1 })
+      }
+    }
+    const stop = ({ changedTouches }) => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', move)
+      window.removeEventListener('touchmove', move)
+      window.removeEventListener('touchend', stop)
+      window.removeEventListener('touchcancel', stop)
+      move({ touches: changedTouches })
       actions.up()
-    })
-    let { field } = game
-    let mines = game.flags
+    }
+    window.addEventListener('scroll', move)
+    window.addEventListener('touchmove', move)
+    window.addEventListener('touchend', stop)
+    window.addEventListener('touchcancel', stop)
+    return {
+      game: {
+        ...game,
+        pressed: true,
+        pressedX: x,
+        pressedY: y,
+        group: event.shiftKey || openable(game, x, y),
+        touch: true,
+      },
+    }
+  },
+  flag: () => ({ game, marks }) => {
+    const { pressedX, pressedY, field, flags } = game
+    if (pressedX < 0 || pressedY < 0) return null
+    const cell = field[pressedY][pressedX]
+    if (cell.opened) return null
+    const nextField = game.field.slice()
+    nextField[pressedY] = nextField[pressedY].slice()
+    const nextCell = {
+      ...cell,
+      flag: marks ? !cell.mark && !cell.flag : !cell.flag,
+      mark: marks && cell.flag,
+    }
+    nextField[pressedY][pressedX] = nextCell
+    const mines = cell.flag === nextCell.flag ? flags : flags + (nextCell.flag ? -1 : 1)
+    return {
+      game: {
+        ...game,
+        field: nextField,
+        flags: mines,
+        pressedX: -1,
+        pressedY: -1,
+      },
+    }
+  },
+  down: ({ event, x, y }) => ({ game, marks }, actions) => {
+    if (game.touch || event.button > 2 || game.win || game.lose) return null
+    window.addEventListener('mouseup', actions.up)
+    let { field, flags } = game
+    const cell = field[y][x]
     if (!game.pressed && event.button === 2 && !field[y][x].opened) {
       field = field.slice()
       field[y] = field[y].slice()
-      const prev = field[y][x]
-      const next = {
-        ...prev,
-        flag: marks ? !prev.mark && !prev.flag : !prev.flag,
-        mark: marks && prev.flag,
+      const nextCell = {
+        ...cell,
+        flag: marks ? !cell.mark && !cell.flag : !cell.flag,
+        mark: marks && cell.flag,
       }
-      field[y][x] = next
-      mines = prev.flag === next.flag ? game.flags : game.flags + (next.flag ? -1 : 1)
+      field[y][x] = nextCell
+      flags = cell.flag === nextCell.flag ? flags : flags + (nextCell.flag ? -1 : 1)
     }
     return {
       game: {
@@ -133,14 +253,22 @@ export const actions = {
         pressedX: x,
         pressedY: y,
         group: event.shiftKey || event.buttons > 2,
-        flags: mines,
+        flags,
       },
     }
   },
-  move: ({ x, y }) => ({ game }) => ({
-    game: { ...game, pressedX: x, pressedY: y },
-  }),
+  move: ({ x, y }) => ({ game }) => {
+    if (x === game.pressedX && y === game.pressedY) return null
+    return {
+      game: {
+        ...game,
+        pressedX: x,
+        pressedY: y,
+      },
+    }
+  },
   up: () => ({ game }, actions) => {
+    window.removeEventListener('mouseup', actions.up)
     const { width, height, pressedX, pressedY } = game
     if (game.win || game.lose || pressedX < 0 || pressedY < 0) {
       if (!game.pressed && !game.group) return null
@@ -233,6 +361,7 @@ export const actions = {
         time: begin ? 1 : game.time,
         lose,
         win,
+        touch: false,
       },
     }
   },
@@ -301,15 +430,7 @@ export const actions = {
   }),
   submitCustomField: (event) => ({ game, customField }, actions) => {
     event.preventDefault()
-    const width = Math.max(9, Math.min(40, parseInt(customField.width, 10) || game.width))
-    const height = Math.max(9, Math.min(30, parseInt(customField.height, 10) || game.height))
-    const mines = parseInt(customField.mines, 10) || game.mines
-    actions.reset({
-      level: 'custom',
-      width,
-      height,
-      mines: Math.max(10, Math.min(Math.floor(width * height * 0.8), mines)),
-    })
+    actions.reset(customLevel(customField, game))
     return { customField: null }
   },
   toggleMarks: () => (state) => {
@@ -338,7 +459,7 @@ export const actions = {
 export const view = (state, actions) => {
   if (state.destroy) return null
   return (
-    <main>
+    <main oncontextmenu={prevent} ondragstart={prevent} oncreate={actions.init}>
       {state.game && <Game key="a" state={state} actions={actions} />}
       {state.winner && <Winner key="b" state={state.winner} actions={actions} />}
       {state.bestTime && <BestTime key="c" state={state.bestTime} actions={actions} />}

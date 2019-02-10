@@ -25,7 +25,7 @@ export const view = () => (
           content="A free, online minesweeper game written in javascript with open source."
         />
         <meta name="keywords" content="minesweeper, game, online, free, javascript, open source" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
         <meta name="theme-color" content="#c0c0c0" />
         <link rel="manifest" href={manifest} />
         <link rel="apple-touch-icon" href={icon} />
@@ -43,7 +43,9 @@ export const view = () => (
         )}
       </head>
       <body>
-        <div id="app" />
+        <div id="app">
+          <main />
+        </div>
       </body>
     </html>
   </Fragment>
