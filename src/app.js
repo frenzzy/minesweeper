@@ -155,9 +155,7 @@ export const actions = {
     })
     localStorage.setItem(
       'level',
-      params.level === 'custom'
-        ? [params.width, params.height, params.mines].join()
-        : params.level,
+      params.level === 'custom' ? [params.width, params.height, params.mines].join() : params.level,
     )
     return {
       menu: null,

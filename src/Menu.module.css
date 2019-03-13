@@ -99,10 +99,10 @@
 }
 
 .check {
-  display: inline-block;
   position: relative;
-  vertical-align: baseline;
+  display: inline-block;
   margin: 0 6px 0 -13px;
+  vertical-align: baseline;
   fill: currentColor;
 }
 

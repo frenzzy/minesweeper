@@ -1,15 +1,16 @@
+html,
+body,
+#app {
+  height: 100%;
+}
+
 html {
   font: normal 11px/16px Tahoma, Geneva, sans-serif;
 }
 
 body {
   margin: 0;
-}
-
-html,
-body,
-#app {
-  height: 100%;
+  background: #cbcbcb;
 }
 
 main {
@@ -21,7 +22,7 @@ main {
   min-width: 100%;
   min-height: 100%;
   vertical-align: top;
-  background: #346da8 url(./background.jpg) 50% 50%;
+  background: url(./background.jpg) 50% 50%;
   background-size: cover;
   user-select: none;
 }

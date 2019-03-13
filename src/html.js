@@ -26,9 +26,12 @@ export const view = () => (
         />
         <meta name="keywords" content="minesweeper, game, online, free, javascript, open source" />
         <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-        <meta name="theme-color" content="#c0c0c0" />
+        <meta name="theme-color" content="#cbcbcb" />
         <meta property="og:title" content="Minesweeper" />
-        <meta property="og:description" content="A free, online minesweeper game written in javascript with open source" />
+        <meta
+          property="og:description"
+          content="A free, online minesweeper game written in javascript with open source"
+        />
         <meta property="og:url" content="https://frenzzy.github.io/minesweeper/" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:image" content="https://frenzzy.github.io/minesweeper/minesweeper.jpg" />

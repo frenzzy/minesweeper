@@ -3,6 +3,10 @@ import { state, actions, view } from './app'
 
 window.app = app(state, actions, view, document.getElementById('app'))
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+
 // Enable hot module replacement
 // https://webpack.js.org/concepts/hot-module-replacement/
 if (module.hot) {
